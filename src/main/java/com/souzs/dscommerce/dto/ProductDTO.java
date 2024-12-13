@@ -1,11 +1,18 @@
 package com.souzs.dscommerce.dto;
 
 import com.souzs.dscommerce.entities.Product;
+import jakarta.validation.constraints.*;
 
 public class ProductDTO {
     private Long id;
+    // Verifica se nao e nulo, nao e vazio e nao e apenas espacos
+    @NotBlank(message = "Campo requerido.")
+    @Size(min = 3, max = 80, message = "Nome deve ter entre 3 e 80 caracteres.")
     private String name;
+    @NotBlank(message = "Campo requerido.")
+    @Size(min = 10, message = "Descrição de ter no mínimo 10 caracteres.")
     private String description;
+    @Positive(message = "O preço deve ser positivo.")
     private Double price;
     private String imgUrl;
 
