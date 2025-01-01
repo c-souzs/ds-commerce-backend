@@ -3,9 +3,8 @@ package com.souzs.dscommerce.entities;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "tb_user")
@@ -23,6 +22,13 @@ public class User {
     @OneToMany(mappedBy = "client")
     private List<Order> orders = new ArrayList<>();
 
+    @ManyToMany
+    @JoinTable(name = "tb_user_role",
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles = new HashSet<>();
+
     public User() {
     }
 
@@ -33,6 +39,21 @@ public class User {
         this.phone = phone;
         this.birthDate = birthDate;
         this.password = password;
+    }
+
+    public boolean hasRole(String roleName) {
+        Set<Role> filter = roles.stream().filter(role -> role.getAuthority().equals(roleName))
+                .collect(Collectors.toSet());
+
+        return !filter.isEmpty();
+    }
+
+    public void addRole(Role role) {
+        roles.add(role);
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
     }
 
     public Long getId() {
