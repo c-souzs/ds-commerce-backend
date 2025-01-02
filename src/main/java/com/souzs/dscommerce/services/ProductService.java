@@ -1,6 +1,8 @@
 package com.souzs.dscommerce.services;
 
 import com.souzs.dscommerce.dto.ProductDTO;
+import com.souzs.dscommerce.dto.ProductMinDTO;
+import com.souzs.dscommerce.entities.Category;
 import com.souzs.dscommerce.entities.Product;
 import com.souzs.dscommerce.repositories.ProductRepository;
 import com.souzs.dscommerce.services.exceptions.DatabaseException;
@@ -28,8 +30,8 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public Page<ProductDTO> findAll(String name, Pageable pageable) {
-        return repository.searchByName(name, pageable).map(ProductDTO::new);
+    public Page<ProductMinDTO> findAll(String name, Pageable pageable) {
+        return repository.searchByName(name, pageable).map(ProductMinDTO::new);
     }
 
     @Transactional
@@ -77,6 +79,14 @@ public class ProductService {
         product.setDescription(dto.getDescription());
         product.setPrice(dto.getPrice());
         product.setImgUrl(dto.getImgUrl());
+        product.getCategories().clear();
+
+        dto.getCategories().forEach(category -> {
+            Category categoryAssociation = new Category();
+            categoryAssociation.setId(category.getId());
+
+            product.getCategories().add(categoryAssociation);
+        });
     }
 
 }

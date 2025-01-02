@@ -3,6 +3,9 @@ package com.souzs.dscommerce.dto;
 import com.souzs.dscommerce.entities.Product;
 import jakarta.validation.constraints.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ProductDTO {
     private Long id;
     // Verifica se nao e nulo, nao e vazio e nao e apenas espacos
@@ -16,6 +19,9 @@ public class ProductDTO {
     private Double price;
     private String imgUrl;
 
+    @NotEmpty(message = "Deve ter pelo menos uma categoria.")
+    List<CategoryDTO> categories = new ArrayList<>();
+
     public ProductDTO() {
     }
 
@@ -25,6 +31,8 @@ public class ProductDTO {
         description = product.getDescription();
         price = product.getPrice();
         imgUrl = product.getImgUrl();
+
+        product.getCategories().forEach(category -> categories.add(new CategoryDTO(category)));
     }
 
     public ProductDTO(Long id, String name, String description, Double price, String imgUrl) {
@@ -53,5 +61,9 @@ public class ProductDTO {
 
     public String getImgUrl() {
         return imgUrl;
+    }
+
+    public List<CategoryDTO> getCategories() {
+        return categories;
     }
 }
