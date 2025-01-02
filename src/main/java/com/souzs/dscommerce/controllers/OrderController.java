@@ -12,7 +12,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 
 @RestController
-@RequestMapping("/orders")
+@RequestMapping(value = "/orders")
 public class OrderController {
     @Autowired
     private OrderService orderService;
